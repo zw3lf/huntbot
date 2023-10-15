@@ -4,3 +4,5 @@ env
 hunt.db
 *.yaml
 *.json
+.idea/
+venv/
