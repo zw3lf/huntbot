@@ -3,7 +3,7 @@ import sqlite3
 
 conn = sqlite3.connect('hunt.db')
 
-cursor=conn.cursor()
+cursor = conn.cursor()
 
 cursor.executescript('''
 CREATE TABLE `hunt` (
@@ -67,6 +67,3 @@ CREATE TABLE `regions` (
 CREATE INDEX 'hunt_index_0' on 'hunt' ('key', 'huntid', 'worldid');
 
 ''')
-
-
-
