@@ -1712,9 +1712,9 @@ async def websocketrunner():
         await asyncio.sleep(30)
 
 
-SheetLoop.start()
-STLoop.start()
-StatusLoop.start()
-websocketrunner.start()
-
-bot.run(TOKEN)
+if __name__ == '__main__':
+    SheetLoop.start()
+    STLoop.start()
+    StatusLoop.start()
+    websocketrunner.start()
+    bot.run(TOKEN)
