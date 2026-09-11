@@ -300,12 +300,20 @@ ORDER BY hunt.zoneid,hunt.instanceid
     msg+="```"
     return msg
         
-def sonarreset(timestamp):
-    sel="""
-DELETE FROM hunt 
-WHERE lastfound < ?
-    """
-    nuny.db_utils.cursor.execute(sel,(timestamp,))
+def sonarreset(timestamp, world=None):
+    if world:
+        sel="""
+            DELETE hunt FROM hunt
+            INNER JOIN worlds ON worlds.id = hunt.worldid
+            WHERE lastfound < ? AND worlds.name = ?
+        """
+        nuny.db_utils.cursor.execute(sel,(timestamp,world))
+    else:
+        sel="""
+            DELETE FROM hunt
+            WHERE lastfound < ?
+            """
+        nuny.db_utils.cursor.execute(sel,(timestamp,))
     return nuny.db_utils.cursor.rowcount
         
 def sonar_stats(world,exp):
