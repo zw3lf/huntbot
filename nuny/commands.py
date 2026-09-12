@@ -531,13 +531,13 @@ async def reboot_tree(interaction: nuny.discord_utils.discord.Interaction, time:
             maintenance_reboot(time)
             await msg1.edit(content=f"✅ All servers adjusted for server reboot at {time}.")
         else:
-            parsed_world = parse_world(world)
+            parsed_world = parse_world(world.value)
             maintenance_reboot(time, parsed_world)
             await msg1.edit(content=f"✅ World server '{world.name}' adjusted for server reboot at {time}.")
         await msg1.clear_reactions()
     
 @nuny.discord_utils.bot.command(name="reboot",help="Set reboot timer after maintenance. Optionally include world at the end")
-async def reboot_cmd(ctx,time, world):
+async def reboot_cmd(ctx,time, world=None):
 
     if ctx.channel.id!=nuny.config.conf["discord"]["channels"]["bot"]:
         return
@@ -550,9 +550,10 @@ async def reboot_cmd(ctx,time, world):
         parsed_world = None
 
     if parsed_world:
-        msg1=await ctx.send(f"About to reset all worlds maintenance end to time {time}. Confirm by reacting to this with a ✅.")
-    else:
         msg1=await ctx.send(f"About to reset world '{parsed_world}' maintenance end to time {time}. Confirm by reacting to this with a ✅.")
+    else:
+        msg1=await ctx.send(f"About to reset all worlds maintenance end to time {time}. Confirm by reacting to this with a ✅.")
+
 
     await msg1.add_reaction("✅")
 
@@ -579,7 +580,8 @@ async def reboot_cmd(ctx,time, world):
 
 @nuny.discord_utils.bot.tree.command(name="sonarcleanup", description="Clean up sonar data that is older than parameter time.", guild=nuny.discord_utils.guild)
 @app_commands.describe(time="Time (UTC/ST)")
-@app_commands.describe(world=[app_commands.Choice(name="All", value="All")] + worldchoices)
+@app_commands.describe(world="World")
+@app_commands.choices(world=[app_commands.Choice(name="All", value="All")] + worldchoices)
 async def sonarboot_tree(interaction: nuny.discord_utils.discord.Interaction, time: str, world: app_commands.Choice[str]):
     if interaction.channel_id!=nuny.config.conf["discord"]["channels"]["bot"]:
         await interaction.response.send_message("This command is unavailable on this channel.", ephemeral=True)
@@ -621,7 +623,7 @@ async def sonarboot_tree(interaction: nuny.discord_utils.discord.Interaction, ti
         await msg1.clear_reactions()
 
 @nuny.discord_utils.bot.command(name="sonarcleanup",help="Clean up sonar data that is older than parameter time. Optionally include a world")
-async def sonarboot_cmd(ctx,time, world):
+async def sonarboot_cmd(ctx,time, world=None):
 
     if ctx.channel.id!=nuny.config.conf["discord"]["channels"]["bot"]:
         return

@@ -155,7 +155,7 @@ def get_history(world,expansion):
 def maintenance_reboot(time, world=None):
     for w in nuny.config.conf["worlds"]:
         if world:
-            if w == world:
+            if w["name"] == world:
                 for e in range(5,8):
                     nuny.db_utils.setstatus(w["name"],e,"Rebooted",time)
         else:
